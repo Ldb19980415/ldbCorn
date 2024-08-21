@@ -7,7 +7,7 @@ WORKDIR /app
 # 复制 package.json 和 package-lock.json
 # COPY package*.json ./
 
-# RUN npm config set registry https://registry.npmmirror.com/
+RUN npm config set registry https://registry.npmmirror.com/
 
 
 # 复制所有项目文件到容器中
