@@ -72,7 +72,7 @@ async function main() {
       data: newPosts.sort((a, b) => a.time - b.time) as any[],
     });
     if (startTime !== 1) {
-      // await senWeChatInfo(newPosts);
+      await senWeChatInfo(newPosts);
     }
   } else {
     console.log("本次任务尚未发现新任务");
@@ -92,8 +92,7 @@ const task = async () => {
   }
 };
 
-// schedule("0 */1 * * *", task);
-task()
+schedule("0 */1 * * *", task);
 
 // 捕获程序退出信号
 process.on("exit", (code) => {
