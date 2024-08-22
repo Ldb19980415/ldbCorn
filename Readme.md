@@ -20,4 +20,5 @@ linux启动时候，如果用ts-node 命令，窗口会卡住，换成后台执�
 
 docker build -t ldb-corn-app .
 
-docker run -d --name ldb-corn-app-container -v  ldb-corn-app
+docker run -d --name ldb-corn-app-container -v /root/ldbCorn/prisma/dev.db:/app/prisma/dev.db -v /root/ldbCorn/output.txt:/app/output.txt  ldb-corn-app
+

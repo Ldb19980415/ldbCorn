@@ -11,7 +11,12 @@ export interface PostItf {
   time: number;
   target: String;
 }
-
+interface StartCount {
+  id?: number;
+  count: number;
+  firstTime: number;
+  lastTime: number;
+}
 async function main() {
   // 新增推送内容列表
   const newPosts: PostItf[] = [];
@@ -22,13 +27,40 @@ async function main() {
   // 对比历史推送内容与第一页推送内容，把新内容push到newPosts中
   page1Posts.forEach((item) => {
     const tmpIdx = posts.findIndex(
-      (p:any) => p.title === item.title && p.time == item.time
+      (p: any) => p.title === item.title && p.time == item.time
     );
     if (tmpIdx === -1) {
       newPosts.push(item);
     }
   });
 
+  let startTime: number;
+  // 判断是不是第一次启动，第一次启动会导致新消息内容过多，server酱会报错
+  // TODO 考虑后续试试用post请求能不能解决这个数据过多问题
+  const firstData: StartCount | null = await prisma.startCount.findFirst();
+  if (firstData) {
+    firstData.lastTime = dayjs().unix();
+    firstData.count += 1;
+    startTime = firstData.count;
+    console.log(`第${firstData.count}次启动`);
+    await prisma.startCount.update({
+      where: {
+        id: firstData.id,
+      },
+      data: firstData,
+    });
+  } else {
+    startTime = 1;
+    const tmpV: StartCount = {
+      firstTime: dayjs().unix(),
+      lastTime: dayjs().unix(),
+      count: 1,
+    };
+    await prisma.startCount.create({
+      data: tmpV,
+    });
+    console.log("第一次启动");
+  }
   // 如果有新内容，则发送微信推送！以及把新内容插入到数据库中，变成历史信息
   if (newPosts.length) {
     console.log(`发现${newPosts.length}条新数据`);
@@ -39,7 +71,9 @@ async function main() {
     await prisma.post.createMany({
       data: newPosts.sort((a, b) => a.time - b.time) as any[],
     });
-    await senWeChatInfo(newPosts);
+    if (startTime !== 1) {
+      // await senWeChatInfo(newPosts);
+    }
   } else {
     console.log("本次任务尚未发现新任务");
   }
@@ -58,7 +92,8 @@ const task = async () => {
   }
 };
 
-schedule("0 */1 * * *", task);
+// schedule("0 */1 * * *", task);
+task()
 
 // 捕获程序退出信号
 process.on("exit", (code) => {

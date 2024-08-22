@@ -4,6 +4,7 @@ import { load } from "cheerio";
 import dayjs from "dayjs";
 import { searchUrl, sendInfoUrl } from "./const";
 
+
 export const getPage1Posts = async () => {
   // 发送请求
   const res = await axios.get(searchUrl);
@@ -46,7 +47,13 @@ export const senWeChatInfo = async (data: PostItf[]) => {
 
               `,
     };
-    await axios.get(sendInfoUrl, { params });
+    const res = await axios.get(sendInfoUrl, { params });
+    if (res?.status === 200) {
+      console.log("消息推送成功！");
+    } else {
+      console.log("消息推送失败！");
+      console.error(res);
+    }
   } else {
     const params = {
       title: "一次性发布了多条内容嗷",
@@ -64,6 +71,12 @@ export const senWeChatInfo = async (data: PostItf[]) => {
         )
         .join(),
     };
-    await axios.get(sendInfoUrl, { params });
+    const res = await axios.get(sendInfoUrl, { params });
+    if (res?.status === 200) {
+      console.log("消息推送成功！");
+    } else {
+      console.log("消息推送失败！");
+      console.error(res);
+    }
   }
 };

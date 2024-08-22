@@ -18,3 +18,10 @@ model Post {
 
   @@unique([title, time])
 }
+
+model StartCount {
+  id    Int     @id @default(autoincrement())
+  count Int 
+  firstTime Int
+  lastTime Int
+}
