@@ -21,4 +21,4 @@ RUN npm install
 # EXPOSE 3000  # 如果你的应用使用某个特定端口，请取消注释
 
 # 启动应用
-CMD ["npm", "start"]
+CMD ["/bin/sh", "-c", "npm start >> output.txt 2>&1"]
