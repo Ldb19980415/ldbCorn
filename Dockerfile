@@ -1,6 +1,11 @@
 # 使用指定版本的 Node.js
 FROM node:21.7.3
 
+# 设置时区为上海
+RUN apt-get update && apt-get install -y tzdata && \
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone
+
 # 设置工作目录
 WORKDIR /app
 

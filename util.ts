@@ -71,7 +71,7 @@ export const senWeChatInfo = async (data: PostItf[]) => {
         )
         .join(),
     };
-    const res = await axios.get(sendInfoUrl, { params });
+    const res = await axios.post(sendInfoUrl, params);
     if (res?.status === 200) {
       console.log("消息推送成功！");
     } else {
