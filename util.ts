@@ -56,7 +56,7 @@ export const senWeChatInfo = async (data: PostItf[]) => {
     }
   } else {
     const params = {
-      title: "一次性发布了多条内容嗷",
+      title: `一次性发布了${data.length}条内容嗷`,
       desp: data
         .map(
           (item) => `
