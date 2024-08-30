@@ -21,6 +21,7 @@
     "axios": "^1.7.4",
     "cheerio": "^1.0.0",
     "dayjs": "^1.11.12",
-    "node-cron": "^3.0.3"
+    "node-cron": "^3.0.3",
+    "puppeteer": "^23.2.1"
   }
 }
